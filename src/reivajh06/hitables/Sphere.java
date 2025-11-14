@@ -20,15 +20,16 @@ public class Sphere implements Hitable {
 		Vector3D oc = Vector3D.subtract(r.origin(), center);
 
 		double a = Vector3D.dot(r.direction(), r.direction());
-		double b = 2.0 * Vector3D.dot(oc, r.direction());
+		double b = Vector3D.dot(oc, r.direction());
 		double c = Vector3D.dot(oc, oc) - radius * radius;
-		double discriminant = b * b - 4 * a * c;
+		double discriminant = b * b - a * c;
 
 		if(discriminant > 0) {
-			double solution1 = (- b - Math.sqrt(b * b - a * c)) / a;
-			double solution2 = (-b + Math.sqrt(b * b - a * c)) / a;
+			double sqrt = Math.sqrt(discriminant);
+			double solution1 = (- b - sqrt) / a;
+			double solution2 = (- b + sqrt) / a;
 
-			return recordIfHit(r, solution1, tMin, tMax, record) | recordIfHit(r, solution2, tMin, tMax, record);
+			return recordIfHit(r, solution1, tMin, tMax, record) || recordIfHit(r, solution2, tMin, tMax, record);
 		}
 
 		return false;

@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+
 public class Main {
 
 	private static final String RESOURCESDIRECTORYPATH = "resources//";
@@ -53,7 +56,7 @@ public class Main {
 		}
 
 		try {
-			Files.writeString(Path.of(RESOURCESDIRECTORYPATH + "sampleWithHitableList.ppm"), data.toString());
+			Files.writeString(Path.of(RESOURCESDIRECTORYPATH + "sampleWithHitableList.ppm"), data.toString(), CREATE, TRUNCATE_EXISTING);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
