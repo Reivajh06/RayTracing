@@ -75,12 +75,19 @@ public class Main {
 	}
 
 	private static Vector3D color(Ray r) {
-		if(hitSphere(new Vector3D(0, 0, -1), 0.5, r)) {
-			return new Vector3D(1, 0, 0);
+		double t = hitSphere(new Vector3D(0, 0, -1), 0.5, r);
+
+		if(t > 0.0) {
+			Vector3D N = Vector3D.unitVector(Vector3D.subtract(r.pointAtParameter(t), new Vector3D(0, 0, -1)));
+
+			return Vector3D.scalarProduct(
+					new Vector3D(N.x() + 1, N.y() + 1, N.z() + 1),
+					0.5
+			);
 		}
 
 		Vector3D unitDirection = Vector3D.unitVector(r.direction());
-		double t = 0.5 * (unitDirection.y() + 1.0);
+		t = 0.5 * (unitDirection.y() + 1.0);
 
 		return Vector3D.add(
 				Vector3D.scalarProduct(new Vector3D(1.0, 1.0, 1.0), (1.0 - t)),
@@ -89,7 +96,7 @@ public class Main {
 	}
 
 
-	private static boolean hitSphere(Vector3D center, double radius, Ray r) {
+	private static double hitSphere(Vector3D center, double radius, Ray r) {
 		Vector3D oc = Vector3D.subtract(r.origin(), center);
 
 		double a = Vector3D.dot(r.direction(), r.direction());
@@ -97,6 +104,10 @@ public class Main {
 		double c = Vector3D.dot(oc, oc) - radius * radius;
 		double discriminant = b * b - 4 * a * c;
 
-		return (discriminant > 0);
+		if(discriminant < 0) {
+			return -1.0;
+		}
+
+		return (-b - Math.sqrt(discriminant)) / (2.0 * a);
 	}
 }
