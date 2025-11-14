@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class HitableList {
+public class HitableList implements Hitable {
 
 	private List<Hitable> hitablesList;
 
@@ -20,6 +20,7 @@ public class HitableList {
 		hitablesList.addAll(Arrays.asList(hitables));
 	}
 
+	@Override
 	public boolean hit(Ray r, double tMin, double tMax, Hitable.HitRecord record) {
 		Hitable.HitRecord tempRecord = new Hitable.HitRecord();
 
@@ -38,5 +39,17 @@ public class HitableList {
 		}
 
 		return hitAnything;
+	}
+
+	public void add(Hitable hitable) {
+		hitablesList.add(hitable);
+	}
+
+	public Hitable remove(int index) {
+		return hitablesList.remove(index);
+	}
+
+	public boolean remove(Hitable hitable) {
+		return hitablesList.remove(hitable);
 	}
 }
