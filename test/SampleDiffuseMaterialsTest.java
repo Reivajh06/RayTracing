@@ -1,17 +1,16 @@
-package reivajh06;
-
+import reivajh06.Camera;
+import reivajh06.Ray;
+import reivajh06.Vector3D;
 import reivajh06.hitables.Hitable;
 import reivajh06.hitables.HitableList;
 import reivajh06.hitables.Sphere;
-import reivajh06.materials.Lambertian;
-import reivajh06.materials.Metal;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Random;
 
-public class Main {
+public class SampleDiffuseMaterialsTest {
 
 	private static final String RESOURCESDIRECTORYPATH = "resources//";
 	private static final Random RANDOM = new Random();
@@ -27,10 +26,8 @@ public class Main {
 		data.append("P3\n%s %s\n255\n\n".formatted(nx, ny));
 
 		HitableList world = new HitableList();
-		world.add(new Sphere(new Vector3D(0, 0, -1), 0.5, new Lambertian(new Vector3D(0.8, 0.3, 0.3))));
-		world.add(new Sphere(new Vector3D(0, -100.5, -1), 100, new Lambertian(new Vector3D(0.8, 0.8, 0.0))));
-		world.add(new Sphere(new Vector3D(1, 0, -1), 0.5, new Metal(new Vector3D(0.8, 0.6, 0.2))));
-		world.add(new Sphere(new Vector3D(-1, 0, -1), 0.5, new Metal(new Vector3D(0.8, 0.8, 0.8))));
+		world.add(new Sphere(new Vector3D(0, 0, -1), 0.5));
+		world.add(new Sphere(new Vector3D(0, -100.5, -1), 100));
 
 		Camera camera = new Camera();
 
@@ -47,7 +44,7 @@ public class Main {
 
 					Vector3D p = r.pointAtParameter(2.0);
 
-					col.add(color(r, world, 0));
+					col.add(color(r, world));
 				}
 
 				col.divide(ns);
@@ -62,13 +59,13 @@ public class Main {
 		}
 
 		try {
-			Files.writeString(Path.of(RESOURCESDIRECTORYPATH + "sample_metals.ppm"), data.toString());
+			Files.writeString(Path.of(RESOURCESDIRECTORYPATH + "sample_diffuse_materials.ppm"), data.toString());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public static Vector3D randomInUnitSphere() {
+	private static Vector3D randomInUnitSphere() {
 		Vector3D p;
 
 		do {
@@ -85,16 +82,16 @@ public class Main {
 		return p;
 	}
 
-	public static Vector3D color(Ray r, Hitable hitable, int depth) {
+	public static Vector3D color(Ray r, Hitable hitable) {
 		Hitable.HitRecord record = new Hitable.HitRecord();
 
 		if(hitable.hit(r, 0.001, Double.MAX_VALUE, record)) {
-			Ray scattered = new Ray();
-			Vector3D attenuation = new Vector3D();
+			Vector3D target = Vector3D.add(Vector3D.add(record.p, record.normal), randomInUnitSphere());
 
-			if(depth < 50 && record.material.scatter(r, record, attenuation, scattered)) {
-				return Vector3D.multiply(attenuation, color(scattered, hitable, depth + 1));
-			}
+			return Vector3D.scalarProduct(
+					color(new Ray(record.p, Vector3D.subtract(target, record.p)), hitable),
+					0.5
+			);
 		}
 
 		Vector3D unitDirection = Vector3D.unitVector(r.direction());

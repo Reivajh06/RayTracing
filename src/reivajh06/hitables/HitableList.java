@@ -35,6 +35,7 @@ public class HitableList implements Hitable {
 				record.t = tempRecord.t;
 				record.p = tempRecord.p;
 				record.normal = tempRecord.normal;
+				record.material = tempRecord.material;
 			}
 		}
 

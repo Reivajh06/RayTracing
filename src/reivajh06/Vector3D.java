@@ -19,6 +19,14 @@ public class Vector3D {
 		);
 	}
 
+	public static Vector3D multiply(Vector3D v1, Vector3D v2) {
+		return new Vector3D(
+				v1.x() * v2.x(),
+				v1.y() * v2.y(),
+				v1.z() * v2.z()
+		);
+	}
+
 	public static double dot(Vector3D v1, Vector3D v2) {
 		return v1.x() * v2.x() + v1.y() * v2.y() + v1.z() * v2.z();
 	}
@@ -92,6 +100,36 @@ public class Vector3D {
 
 	public double b() {
 		return coordinates[2];
+	}
+
+	public Vector3D x(double x) {
+		coordinates[0] = x;
+		return this;
+	}
+
+	public Vector3D y(double y) {
+		coordinates[1] = y;
+		return this;
+	}
+
+	public Vector3D z(double z) {
+		coordinates[2] = z;
+		return this;
+	}
+
+	public Vector3D r(double r) {
+		coordinates[0] = r;
+		return this;
+	}
+
+	public Vector3D g(double g) {
+		coordinates[1] = g;
+		return this;
+	}
+
+	public Vector3D b(double b) {
+		coordinates[2] = b;
+		return this;
 	}
 
 	public double length() {

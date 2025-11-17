@@ -2,17 +2,25 @@ package reivajh06.hitables;
 
 import reivajh06.Ray;
 import reivajh06.Vector3D;
+import reivajh06.materials.Material;
 
 public class Sphere implements Hitable {
 
 	private Vector3D center;
 	private double radius;
+	private Material material;
 
 	public Sphere() {}
 
 	public Sphere(Vector3D center, double radius) {
 		this.center = center;
 		this.radius = radius;
+	}
+
+	public Sphere(Vector3D center, double radius, Material material) {
+		this.center = center;
+		this.radius = radius;
+		this.material = material;
 	}
 
 	@Override
@@ -40,6 +48,7 @@ public class Sphere implements Hitable {
 			record.t = temp;
 			record.p = r.pointAtParameter(record.t);
 			record.normal = Vector3D.divide(Vector3D.subtract(record.p, center), radius);
+			record.material = material;
 
 			return true;
 		}
