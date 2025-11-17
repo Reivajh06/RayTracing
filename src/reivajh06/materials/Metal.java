@@ -11,17 +11,14 @@ public class Metal implements Material {
 	private Vector3D albedo;
 	private double fuzz;
 
-	public Metal(Vector3D albedo, double fuzz) {
+	public Metal(Vector3D albedo) {
 		this.albedo = albedo;
-
-		this.fuzz = fuzz < 1 ? fuzz : 1;
 	}
 
-	private Vector3D reflect(Vector3D v, Vector3D n) {
-		return Vector3D.subtract(
-				v,
-				Vector3D.scalarProduct(n, Vector3D.dot(v, n) * 2)
-		);
+	public Metal(Vector3D albedo, double fuzz) {
+		this(albedo);
+
+		this.fuzz = fuzz < 1 ? fuzz : 1;
 	}
 
 	@Override
