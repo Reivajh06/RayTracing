@@ -1,5 +1,6 @@
-package reivajh06;
-
+import reivajh06.Camera;
+import reivajh06.Ray;
+import reivajh06.Vector3D;
 import reivajh06.hitables.Hitable;
 import reivajh06.hitables.HitableList;
 import reivajh06.hitables.Sphere;
@@ -9,10 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Random;
 
-public class Main {
+public class SampleWithAntialiasingTest {
 
 	private static final String RESOURCESDIRECTORYPATH = "resources//";
-	private static final Random RANDOM = new Random();
 
 	public static void main(String[] args) {
 		Random random = new Random();
@@ -47,7 +47,6 @@ public class Main {
 				}
 
 				col.divide(ns);
-				col = new Vector3D(Math.sqrt(col.r()), Math.sqrt(col.g()), Math.sqrt(col.b()));
 
 				int ir = (int) (255.99 * col.r());
 				int ig = (int) (255.99 * col.g());
@@ -58,37 +57,22 @@ public class Main {
 		}
 
 		try {
-			Files.writeString(Path.of(RESOURCESDIRECTORYPATH + "sample_diffuse_materials.ppm"), data.toString());
+			Files.writeString(Path.of(RESOURCESDIRECTORYPATH + "sample_antialiasing.ppm"), data.toString());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private static Vector3D randomInUnitSphere() {
-		Vector3D p;
-
-		do {
-			p = Vector3D.subtract(
-					Vector3D.scalarProduct(
-							new Vector3D(RANDOM.nextDouble(0, 1), RANDOM.nextDouble(0, 1), RANDOM.nextDouble(0, 1)),
-							2.0),
-					new Vector3D(1, 1, 1)
-
-			);
-
-		} while(p.squaredLength() >= 1.0);
-
-		return p;
-	}
-
 	public static Vector3D color(Ray r, Hitable hitable) {
 		Hitable.HitRecord record = new Hitable.HitRecord();
 
-		if(hitable.hit(r, 0.001, Double.MAX_VALUE, record)) {
-			Vector3D target = Vector3D.add(Vector3D.add(record.p, record.normal), randomInUnitSphere());
-
+		if(hitable.hit(r, 0.0, Double.MAX_VALUE, record)) {
 			return Vector3D.scalarProduct(
-					color(new Ray(record.p, Vector3D.subtract(target, record.p)), hitable),
+					new Vector3D(
+							record.normal.x() + 1,
+							record.normal.y() + 1,
+							record.normal.z() + 1
+					),
 					0.5
 			);
 		}
