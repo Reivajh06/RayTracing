@@ -29,8 +29,8 @@ public class Main {
 		HitableList world = new HitableList();
 		world.add(new Sphere(new Vector3D(0, 0, -1), 0.5, new Lambertian(new Vector3D(0.8, 0.3, 0.3))));
 		world.add(new Sphere(new Vector3D(0, -100.5, -1), 100, new Lambertian(new Vector3D(0.8, 0.8, 0.0))));
-		world.add(new Sphere(new Vector3D(1, 0, -1), 0.5, new Metal(new Vector3D(0.8, 0.6, 0.2))));
-		world.add(new Sphere(new Vector3D(-1, 0, -1), 0.5, new Metal(new Vector3D(0.8, 0.8, 0.8))));
+		world.add(new Sphere(new Vector3D(1, 0, -1), 0.5, new Metal(new Vector3D(0.8, 0.6, 0.2), 0.3)));
+		world.add(new Sphere(new Vector3D(-1, 0, -1), 0.5, new Metal(new Vector3D(0.8, 0.8, 0.8), 1)));
 
 		Camera camera = new Camera();
 
