@@ -55,9 +55,6 @@ public class Camera {
 		u = Vector3D.unitVector(Vector3D.cross(vup, w));
 		v = Vector3D.cross(w, u);
 
-		//replaced by the next operations
-		//lowerLeftCorner = new Vector3D(-halfWidth, -halfHeight, 1.0);
-
 		lowerLeftCorner = Vector3D.subtract(origin, Vector3D.scalarProduct(u, halfWidth));
 		lowerLeftCorner.subtract(Vector3D.scalarProduct(v, halfHeight));
 		lowerLeftCorner.subtract(w);

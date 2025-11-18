@@ -76,6 +76,10 @@ public class Vector3D {
 		coordinates[2] = z;
 	}
 
+	public Vector3D(double initialValue) {
+		this(initialValue, initialValue, initialValue);
+	}
+
 	public Vector3D() {}
 
 	public double x() {

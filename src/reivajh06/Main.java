@@ -21,31 +21,25 @@ public class Main {
 		Random random = new Random();
 		StringBuilder data = new StringBuilder();
 
-		int nx = 200;
-		int ny = 100;
-		int ns = 100;
+		int nx = 1280;
+		int ny = 720;
+		int ns = 200;
 
 		data.append("P3\n%s %s\n255\n\n".formatted(nx, ny));
 
-		double R = Math.cos(Math.PI / 4);
+		Hitable world = randomScene();
 
-		HitableList world = new HitableList();
-		world.add(new Sphere(new Vector3D(0, 0, -1), 0.5, new Lambertian(new Vector3D(0.1, 0.2, 0.5))));
-		world.add(new Sphere(new Vector3D(0, -100.5, -1), 100, new Lambertian(new Vector3D(0.8, 0.8, 0.0))));
-		world.add(new Sphere(new Vector3D(1, 0, -1), 0.5, new Metal(new Vector3D(0.8, 0.6, 0.2))));
-		world.add(new Sphere(new Vector3D(-1, 0, -1), 0.5, new Dielectric(1.5)));
-		world.add(new Sphere(new Vector3D(-1, 0, -1), -0.45, new Dielectric(1.5)));
+		Vector3D lookfrom = new Vector3D(13, 2, 3);
+		Vector3D lookat = new Vector3D(0, 0, 0);
+		Vector3D vup = new Vector3D(0, 1, 0);
 
-		Vector3D lookfrom = new Vector3D(3, 3, 2);
-		Vector3D lookat = new Vector3D(0, 0, -1);
-
-		double distToFocus = Vector3D.subtract(lookfrom, lookat).length();
-		double aperture = 2.0;
+		double distToFocus = 10.0;
+		double aperture    = 0.1;
 
 		Camera camera = new Camera(
 				lookfrom,
 				lookat,
-				new Vector3D(0, 1, 0),
+				vup,
 				20,
 				(double) nx / (double) ny,
 				aperture,
@@ -80,7 +74,7 @@ public class Main {
 		}
 
 		try {
-			Files.writeString(Path.of(RESOURCESDIRECTORYPATH + "sample_defocus_blur.ppm"), data.toString());
+			Files.writeString(Path.of(RESOURCESDIRECTORYPATH + "cover.ppm"), data.toString());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -123,5 +117,50 @@ public class Main {
 				Vector3D.scalarProduct(new Vector3D(1.0, 1.0, 1.0), (1.0 - t)),
 				Vector3D.scalarProduct(new Vector3D(0.5, 0.7, 1.0), t)
 		);
+	}
+
+	public static Hitable randomScene() {
+		int n = 500;
+
+		HitableList list = new HitableList();
+
+		list.add(new Sphere(new Vector3D(0, -1000, 0), 1000, new Lambertian(new Vector3D(0.5, 0.5, 0.5))));
+
+		for(int a = -11; a < 11; a++) {
+			for(int b = -11; b < 11; b++) {
+				double chooseMat = RANDOM.nextDouble(0, 1);
+
+				Vector3D center = new Vector3D(a + 0.9 * RANDOM.nextDouble(0, 1), 0.2, b + 0.9 * RANDOM.nextDouble(0, 1));
+
+				if(Vector3D.subtract(center, new Vector3D(4, 0.2, 0)).length() > 0.9) {
+					if(chooseMat < 0.8) { //diffuse
+						Lambertian lambertian = new Lambertian(new Vector3D(
+								RANDOM.nextDouble(0, 1) * RANDOM.nextDouble(0, 1),
+								RANDOM.nextDouble(0, 1) * RANDOM.nextDouble(0, 1),
+								RANDOM.nextDouble(0, 1) * RANDOM.nextDouble(0, 1)));
+
+						list.add(new Sphere(center, 0.2, lambertian));
+
+					} else if(chooseMat < 0.95) { //metal
+						Metal metal = new Metal(new Vector3D(
+								0.5 * (1 + RANDOM.nextDouble(0, 1)),
+								0.5 * (1 + RANDOM.nextDouble(0, 1)),
+								0.5 * (1 + RANDOM.nextDouble(0, 1))),
+								0.5 * RANDOM.nextDouble(0, 1));
+
+						list.add(new Sphere(center, 0.2, metal));
+
+					} else { // glass
+						list.add(new Sphere(center, 0.2, new Dielectric(1.5)));
+					}
+				}
+			}
+		}
+
+		list.add(new Sphere(new Vector3D(0, 1, 0), 1.0, new Dielectric(1.5)));
+		list.add(new Sphere(new Vector3D(-4, 1, 0), 1.0, new Lambertian(new Vector3D(0.4, 0.2, 0.1))));
+		list.add(new Sphere(new Vector3D(4, 1, 0), 1.0, new Metal(new Vector3D(0.7, 0.6, 0.5), 0.0)));
+
+		return list;
 	}
 }
