@@ -1,5 +1,6 @@
-package reivajh06;
-
+import reivajh06.Camera;
+import reivajh06.Ray;
+import reivajh06.Vector3D;
 import reivajh06.hitables.Hitable;
 import reivajh06.hitables.HitableList;
 import reivajh06.hitables.Sphere;
@@ -12,7 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Random;
 
-public class Main {
+public class SampleSchlickTest {
+
 
 	private static final String RESOURCESDIRECTORYPATH = "resources//";
 	public static final Random RANDOM = new Random();
@@ -27,20 +29,14 @@ public class Main {
 
 		data.append("P3\n%s %s\n255\n\n".formatted(nx, ny));
 
-		double R = Math.cos(Math.PI / 4);
-
 		HitableList world = new HitableList();
-		world.add(new Sphere(new Vector3D(-R, 0, -1), R, new Lambertian(new Vector3D(0, 0, 1))));
-		world.add(new Sphere(new Vector3D(R, 0, -1), R, new Lambertian(new Vector3D(1, 0, 0))));
+		world.add(new Sphere(new Vector3D(0, 0, -1), 0.5, new Lambertian(new Vector3D(0.1, 0.2, 0.5))));
+		world.add(new Sphere(new Vector3D(0, -100.5, -1), 100, new Lambertian(new Vector3D(0.8, 0.8, 0.0))));
+		world.add(new Sphere(new Vector3D(1, 0, -1), 0.5, new Metal(new Vector3D(0.8, 0.6, 0.2))));
+		world.add(new Sphere(new Vector3D(-1, 0, -1), 0.5, new Dielectric(1.5)));
+		world.add(new Sphere(new Vector3D(-1, 0, -1), -0.45, new Dielectric(1.5)));
 
-		Camera camera = new Camera(
-				new Vector3D(-2, 2, 1),
-				new Vector3D(0, 0, -1),
-				new Vector3D(0, 1, 0),
-				40,
-				(double) nx / (double) ny
-
-		);
+		Camera camera = new Camera(90, (double) nx / (double) ny);
 
 		for(int j = ny - 1; j >= 0; j--) {
 			for(int i = 0; i < nx; i++) {
@@ -70,7 +66,7 @@ public class Main {
 		}
 
 		try {
-			Files.writeString(Path.of(RESOURCESDIRECTORYPATH + "sample_positionable_camera2.ppm"), data.toString());
+			Files.writeString(Path.of(RESOURCESDIRECTORYPATH + "sample_shlick.ppm"), data.toString());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
