@@ -1,18 +1,17 @@
-package reivajh06;
-
+import reivajh06.Camera;
+import reivajh06.Ray;
+import reivajh06.Vector3D;
 import reivajh06.hitables.Hitable;
 import reivajh06.hitables.HitableList;
 import reivajh06.hitables.Sphere;
-import reivajh06.materials.Dielectric;
 import reivajh06.materials.Lambertian;
-import reivajh06.materials.Metal;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Random;
 
-public class Main {
+public class SamplePositionableCamera {
 
 	private static final String RESOURCESDIRECTORYPATH = "resources//";
 	public static final Random RANDOM = new Random();
@@ -30,26 +29,16 @@ public class Main {
 		double R = Math.cos(Math.PI / 4);
 
 		HitableList world = new HitableList();
-		world.add(new Sphere(new Vector3D(0, 0, -1), 0.5, new Lambertian(new Vector3D(0.1, 0.2, 0.5))));
-		world.add(new Sphere(new Vector3D(0, -100.5, -1), 100, new Lambertian(new Vector3D(0.8, 0.8, 0.0))));
-		world.add(new Sphere(new Vector3D(1, 0, -1), 0.5, new Metal(new Vector3D(0.8, 0.6, 0.2))));
-		world.add(new Sphere(new Vector3D(-1, 0, -1), 0.5, new Dielectric(1.5)));
-		world.add(new Sphere(new Vector3D(-1, 0, -1), -0.45, new Dielectric(1.5)));
-
-		Vector3D lookfrom = new Vector3D(3, 3, 2);
-		Vector3D lookat = new Vector3D(0, 0, -1);
-
-		double distToFocus = Vector3D.subtract(lookfrom, lookat).length();
-		double aperture = 2.0;
+		world.add(new Sphere(new Vector3D(-R, 0, -1), R, new Lambertian(new Vector3D(0, 0, 1))));
+		world.add(new Sphere(new Vector3D(R, 0, -1), R, new Lambertian(new Vector3D(1, 0, 0))));
 
 		Camera camera = new Camera(
-				lookfrom,
-				lookat,
+				new Vector3D(-2, 2, 1),
+				new Vector3D(0, 0, -1),
 				new Vector3D(0, 1, 0),
-				20,
-				(double) nx / (double) ny,
-				aperture,
-				distToFocus
+				40,
+				(double) nx / (double) ny
+
 		);
 
 		for(int j = ny - 1; j >= 0; j--) {
@@ -80,7 +69,7 @@ public class Main {
 		}
 
 		try {
-			Files.writeString(Path.of(RESOURCESDIRECTORYPATH + "sample_defocus_blur.ppm"), data.toString());
+			Files.writeString(Path.of(RESOURCESDIRECTORYPATH + "sample_positionable_camera.ppm"), data.toString());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
