@@ -20,7 +20,7 @@ public class Camera {
 				new Vector3D(-2.0, -1.0, -1.0),
 				new Vector3D(4.0, 0.0, 0.0),
 				new Vector3D(0.0, 2.0, 0.0)
-				);
+		);
 	}
 
 	public Ray getRay(double u, double v) {

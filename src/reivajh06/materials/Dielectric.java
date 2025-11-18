@@ -4,12 +4,21 @@ import reivajh06.Ray;
 import reivajh06.Vector3D;
 import reivajh06.hitables.Hitable;
 
+import static reivajh06.Main.RANDOM;
+
 public class Dielectric implements Material {
 
 	private double refractionIndex;
 
 	public Dielectric(double refractionIndex) {
 		this.refractionIndex = refractionIndex;
+	}
+
+	private double schlick(double cosine) {
+		double r0 = (1 - refractionIndex) / (1 + refractionIndex);
+		r0 *= r0;
+
+		return r0 + (1 - r0) * Math.pow((1 - cosine), 5);
 	}
 
 	private boolean refract(Vector3D v, Vector3D n, double niOverNt, Vector3D refracted) {
@@ -49,6 +58,9 @@ public class Dielectric implements Material {
 
 		Vector3D refracted = new Vector3D();
 
+		double reflectProb;
+		double cosine = refractionIndex * Vector3D.dot(rIn.direction(), record.normal) / rIn.direction().length();
+
 		if(Vector3D.dot(rIn.direction(), record.normal) > 0) {
 			outwardNormal
 					.x(-record.normal.x())
@@ -65,24 +77,23 @@ public class Dielectric implements Material {
 
 			niOverNt = 1.0 / refractionIndex;
 
+			cosine *= -1;
 		}
 
 		if(refract(rIn.direction(), outwardNormal, niOverNt, refracted)) {
-			Ray newScattered = new Ray(record.p, refracted);
-
-			scattered
-					.origin(newScattered.origin())
-					.direction(newScattered.direction());
+			reflectProb = schlick(cosine);
 
 		} else {
-			Ray newScattered = new Ray(record.p, reflected);
+			reflectProb = 1.0;
 
-			scattered
-					.origin(newScattered.origin())
-					.direction(newScattered.direction());
-
-			return false;
 		}
+
+		Ray newScattered = RANDOM.nextDouble(0, 1) < reflectProb ?
+				new Ray(record.p, reflected) : new Ray(record.p, refracted);
+
+		scattered
+				.origin(newScattered.origin())
+				.direction(newScattered.direction());
 
 		return true;
 	}

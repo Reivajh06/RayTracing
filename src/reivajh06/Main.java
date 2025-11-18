@@ -15,7 +15,7 @@ import java.util.Random;
 public class Main {
 
 	private static final String RESOURCESDIRECTORYPATH = "resources//";
-	private static final Random RANDOM = new Random();
+	public static final Random RANDOM = new Random();
 
 	public static void main(String[] args) {
 		Random random = new Random();
@@ -32,6 +32,7 @@ public class Main {
 		world.add(new Sphere(new Vector3D(0, -100.5, -1), 100, new Lambertian(new Vector3D(0.8, 0.8, 0.0))));
 		world.add(new Sphere(new Vector3D(1, 0, -1), 0.5, new Metal(new Vector3D(0.8, 0.6, 0.2))));
 		world.add(new Sphere(new Vector3D(-1, 0, -1), 0.5, new Dielectric(1.5)));
+		world.add(new Sphere(new Vector3D(-1, 0, -1), -0.45, new Dielectric(1.5)));
 
 		Camera camera = new Camera();
 
@@ -63,7 +64,7 @@ public class Main {
 		}
 
 		try {
-			Files.writeString(Path.of(RESOURCESDIRECTORYPATH + "sample_dielectrics.ppm"), data.toString());
+			Files.writeString(Path.of(RESOURCESDIRECTORYPATH + "sample_shlick.ppm"), data.toString());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
