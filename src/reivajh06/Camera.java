@@ -1,6 +1,6 @@
 package reivajh06;
 
-import static reivajh06.RayTracer.RANDOM;
+import static reivajh06.STRayTracer.RANDOM;
 
 public class Camera {
 

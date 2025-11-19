@@ -4,7 +4,7 @@ import reivajh06.Ray;
 import reivajh06.Vector3D;
 import reivajh06.hitables.Hitable;
 
-import static reivajh06.RayTracer.RANDOM;
+import static reivajh06.STRayTracer.RANDOM;
 
 public class Dielectric implements Material {
 
