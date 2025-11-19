@@ -1,10 +1,9 @@
 package reivajh06.materials;
 
 import reivajh06.Ray;
+import reivajh06.Utils;
 import reivajh06.Vector3D;
 import reivajh06.hitables.Hitable;
-
-import static reivajh06.Main.randomInUnitSphere;
 
 public class Metal implements Material {
 
@@ -26,7 +25,7 @@ public class Metal implements Material {
 		Vector3D reflected = reflect(rIn.direction(), record.normal);
 		scattered
 				.origin(record.p)
-				.direction(Vector3D.add(reflected, Vector3D.scalarProduct(randomInUnitSphere(), fuzz)));
+				.direction(Vector3D.add(reflected, Vector3D.scalarProduct(Utils.randomInUnitSphere(), fuzz)));
 
 		attenuation
 				.r(albedo.r())

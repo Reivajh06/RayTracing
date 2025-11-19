@@ -6,6 +6,7 @@ import reivajh06.hitables.HitableList;
 import reivajh06.hitables.Sphere;
 import reivajh06.materials.Lambertian;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,7 +14,7 @@ import java.util.Random;
 
 public class SamplePositionableCamera {
 
-	private static final String RESOURCESDIRECTORYPATH = "resources//";
+	private static final String RESOURCESDIRECTORYPATH = "RayTracing/resources/";
 	public static final Random RANDOM = new Random();
 
 	public static void main(String[] args) {
@@ -69,7 +70,9 @@ public class SamplePositionableCamera {
 		}
 
 		try {
-			Files.writeString(Path.of(RESOURCESDIRECTORYPATH + "sample_positionable_camera.ppm"), data.toString());
+			File file = new File(RESOURCESDIRECTORYPATH, "sample_positionable_camera.ppm");
+			file.getParentFile().mkdirs();
+			Files.writeString(file.toPath(), data.toString());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
