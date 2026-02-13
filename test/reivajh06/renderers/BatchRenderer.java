@@ -5,8 +5,8 @@ import reivajh06.ImageContainer;
 public class BatchRenderer extends BaseRenderer {
 
 	private Pixel[][] rows;
-	private int rIndex; //position of current row
-	private int pIndex; //position of current pixel within current row
+	private int rIndex;
+	private int pIndex;
 
 	public BatchRenderer(ImageContainer imageContainer, int batchSize) {
 		super(imageContainer);
@@ -15,7 +15,7 @@ public class BatchRenderer extends BaseRenderer {
 	}
 
 	@Override
-	public void render(int x, int y, int rgb) {
+	public synchronized void render(int x, int y, int rgb) {
 		rows[rIndex][pIndex++] = new Pixel(x, y, rgb);
 
 		if(pIndex >= rows[0].length) {

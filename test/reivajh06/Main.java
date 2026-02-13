@@ -1,17 +1,19 @@
 package reivajh06;
 
 import reivajh06.multithreading.ThreadPoolMTRayTracer;
+import reivajh06.renderers.BatchRenderer;
 import reivajh06.renderers.PixelRenderer;
+import reivajh06.renderers.RowRenderer;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Main {
 
-	public static final int NUM_SAMPLES = 800;
+	public static final int NUM_SAMPLES = 400;
 
-	public static final int WIDTH = 1920;
-	public static final int HEIGHT = 1080;
+	public static final int WIDTH = 620;
+	public static final int HEIGHT = 480;
 
 	private static ImageContainer imageContainer = new ImageContainer(WIDTH, HEIGHT);
 
@@ -35,7 +37,7 @@ public class Main {
 		window.setEnabled(true);
 		window.setVisible(true);
 
-		rayTracer.run(createScene(), new PixelRenderer(imageContainer), new ImageConfig(imageContainer.getImageWidth(), imageContainer.getImageHeight(), NUM_SAMPLES));
+		rayTracer.run(createScene(), new BatchRenderer(imageContainer, 20), new ImageConfig(imageContainer.getImageWidth(), imageContainer.getImageHeight(), NUM_SAMPLES));
 	}
 
 	public static void paintImage() {

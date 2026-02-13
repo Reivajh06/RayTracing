@@ -4,27 +4,35 @@ import reivajh06.ImageContainer;
 
 public class RowRenderer extends BaseRenderer {
 
-	private Pixel[] row;
-	int index;
+	private final int width;
+
+	private final ThreadLocal<Pixel[]> rowTL;
+	private final ThreadLocal<Integer> indexTL;
 
 	public RowRenderer(ImageContainer imageContainer) {
 		super(imageContainer);
+		this.width = imageContainer.getImageWidth();
 
-		row = new Pixel[imageContainer.getImageWidth()];
+		rowTL = ThreadLocal.withInitial(() -> new Pixel[width]);
+		indexTL = ThreadLocal.withInitial(() -> 0);
 	}
 
 	@Override
 	public void render(int x, int y, int rgb) {
-		row[index++] = new Pixel(x, y, rgb);
+		Pixel[] row = rowTL.get();
+		int index = indexTL.get();
 
-		if(index >= row.length) {
-			for(Pixel pixel : row) {
-				imageContainer.paintPixel(pixel.x(), pixel.y(), pixel.rgb());
+		row[index] = new Pixel(x, y, rgb);
+		index++;
+
+		if (index >= row.length) {
+			for (Pixel p : row) {
+				imageContainer.paintPixel(p.x(), p.y(), p.rgb());
 			}
-
 			imageContainer.repaint();
-
 			index = 0;
 		}
+
+		indexTL.set(index);
 	}
 }
