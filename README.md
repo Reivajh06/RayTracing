@@ -4,7 +4,7 @@
 
 This project is a Java Port of [Ray Tracing in One Weekend by Peter Shirley](https://www.realtimerendering.com/raytracing/Ray%20Tracing%20in%20a%20Weekend.pdf). The original code is [here](https://github.com/RayTracing/raytracing.github.io).
 
-It is ray tracer solely on CPU written in Java, with some minor changes due to the differences of the sintax in Java and C++, allowing to specify the size and number of samples per pixel in the image.
+It is ray tracer solely on CPU written in Java, with some minor changes due to the differences of the syntax in Java and C++, allowing to specify the size and number of samples per pixel in the image.
 
 This ray tracer uses Java Swing to help us visualize the renderization of the image in real time implementing Multithreading. It consists of three different kinds of Renderers and three multithreading ray tracers.
 
