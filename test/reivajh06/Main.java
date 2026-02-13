@@ -37,7 +37,13 @@ public class Main {
 		window.setEnabled(true);
 		window.setVisible(true);
 
-		rayTracer.run(createScene(), new BatchRenderer(imageContainer, 20), new ImageConfig(imageContainer.getImageWidth(), imageContainer.getImageHeight(), NUM_SAMPLES));
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+
+		rayTracer.run(createScene(), new PixelRenderer(imageContainer), new ImageConfig(imageContainer.getImageWidth(), imageContainer.getImageHeight(), NUM_SAMPLES));
 	}
 
 	public static void paintImage() {
