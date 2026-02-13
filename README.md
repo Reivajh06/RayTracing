@@ -24,7 +24,7 @@ As mentioned before, there are three Renderers which help us observe the renderi
 
 ![Alt text](demo/RowRenderer.gif)
 
-- BatchRenderer: each Worker will paint one or more rows (can be specified the number of rows painted)
+- BatchRenderer: each Worker will paint n contiguous rows in memory
 
 ![Alt text](demo/BatchRenderer.gif)
 
